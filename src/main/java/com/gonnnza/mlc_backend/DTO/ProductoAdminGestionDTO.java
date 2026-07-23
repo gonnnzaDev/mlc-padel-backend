@@ -1,0 +1,17 @@
+package com.gonnnza.mlc_backend.DTO;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+
+
+public class ProductoAdminGestionDTO {
+    private String nombre;
+    private Integer stock;
+
+}
