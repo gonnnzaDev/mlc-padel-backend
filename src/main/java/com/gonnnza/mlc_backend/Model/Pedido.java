@@ -31,7 +31,7 @@ public class Pedido {
     private Long id;
 
     @Column(name = "producto_id")
-    private Integer productoId;
+    private Long productoId;
 
     @Column(name = "producto_nombre")
     private String productoNombre;

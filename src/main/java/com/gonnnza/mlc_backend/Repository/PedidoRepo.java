@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.gonnnza.mlc_backend.Model.Pedido;
 
 @Repository
-public interface PedidoRepo extends JpaRepository<Long, Pedido> {
+public interface PedidoRepo extends JpaRepository<Pedido, Long> {
 
 }

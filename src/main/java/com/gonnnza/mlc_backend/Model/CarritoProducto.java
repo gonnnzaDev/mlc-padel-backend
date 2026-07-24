@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 
 public class CarritoProducto {
     private Long id;
-    private Integer producto_id;
+    private Long producto_id;
     private Integer cantidad;
 }

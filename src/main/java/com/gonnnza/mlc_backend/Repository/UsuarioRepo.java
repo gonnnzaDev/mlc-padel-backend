@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.gonnnza.mlc_backend.Model.Usuario;
 
 @Repository
-public interface UsuarioRepo extends JpaRepository<Long, Usuario>{
+public interface UsuarioRepo extends JpaRepository<Usuario, Long>{
     
 }

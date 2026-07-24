@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.gonnnza.mlc_backend.Model.Categoria;
 
 @Repository
-public interface CategoriaRepo extends JpaRepository<Long, Categoria> {
-
+public interface CategoriaRepo extends JpaRepository<Categoria,  Long> {
 }
