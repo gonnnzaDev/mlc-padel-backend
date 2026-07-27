@@ -65,5 +65,5 @@ public class PedidoTicket {
     private BigDecimal preciototal;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pedido> pedidos;
+    private List<ItemPedido> pedidos;
 }

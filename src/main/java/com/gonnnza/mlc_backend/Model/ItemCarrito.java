@@ -1,11 +1,7 @@
 package com.gonnnza.mlc_backend.Model;
 
-import java.util.List;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -14,25 +10,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 
 @Entity
-@Table(name = "carritos")
+@Table(name = "productos_carrito")
+public class ItemCarrito
 
-public class Carrito {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
-    
-    private Double total;
-    
-    @Column(name = "productos")
-    private List<ItemCarrito> productos;
+    private Integer cantidad;
 
+    @ManyToOne
+    @JoinColumn(name = "producto_id")
+
+    private Producto producto;
+
+    @ManyToOne
+    @JoinColumn(name = "carrito_id")
+    private Carrito carrito;
 }

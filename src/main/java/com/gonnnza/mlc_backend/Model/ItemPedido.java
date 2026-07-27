@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 
 // esto seria pedido / compra realizada
 
-public class Pedido {
+public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
