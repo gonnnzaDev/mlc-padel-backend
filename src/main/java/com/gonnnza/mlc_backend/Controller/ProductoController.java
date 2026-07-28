@@ -20,7 +20,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/productos")
 @AllArgsConstructor
 

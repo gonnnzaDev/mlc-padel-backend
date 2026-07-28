@@ -4,6 +4,7 @@ import com.gonnnza.mlc_backend.Model.Usuario;
 import io.jsonwebtoken.*;
 import java.util.Date;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.security.Key;
 
@@ -52,9 +53,9 @@ public class JwtUtil {
     }
 
     //comprueba con los metodos antes creados si es valido
-    public boolean esValido(String token, Usuario usuario) {
+    public boolean esValido(String token, UserDetails userDetails) {
         String email = obtenerEmail(token);
-        return email.equals(usuario.getEmail()) && !estaExpirado(token);
+        return email.equals(userDetails.getUsername()) && !estaExpirado(token);
     }
 
 

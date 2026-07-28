@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pedidos")
-@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class PedidoController {
 

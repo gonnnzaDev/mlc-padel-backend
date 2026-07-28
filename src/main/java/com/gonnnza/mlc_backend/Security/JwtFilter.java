@@ -46,7 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
             // si es valido el token, lo carga
-            if (jwtUtil.esValido(token, (Usuario) userDetails)) {
+            if (jwtUtil.esValido(token, userDetails)) {
 
                 //objeto de autenticacion
                 // (osea lo q nos va a permitir guardar la autenticacion en spring/backend)

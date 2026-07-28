@@ -2,6 +2,7 @@ package com.gonnnza.mlc_backend.Model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,7 @@ public class Categoria {
 
     private String nombre;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "categoria")
     private Set<Producto> productos;
 }

@@ -8,11 +8,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@AllArgsConstructor
+import java.util.Map;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/usuarios")
-@CrossOrigin(origins = "*")
 public class UsuarioController {
     private final UsuarioService service;
 
@@ -32,7 +32,7 @@ public class UsuarioController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body("Login exitoso");
+                .body(Map.of("token", token, "mensaje", "Login exitoso"));
 
         /* Testear sino sacar lo de cokies y poner este return =3
         return ResponseEntity.ok().body(token);

@@ -20,7 +20,6 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/categorias")
-@CrossOrigin(origins = "*")
 public class CategoriaController {
 
     private final CategoriaRepo repo;

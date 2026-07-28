@@ -22,10 +22,9 @@ public class UsuarioService {
     public String login(UsuarioLoginDTO dto) {
 
         String email = dto.getEmail();
-        String hashPassword = passwordEncoder.encode(dto.getPassword());
         Usuario usuario = buscarUsuarioPorEmail(email);
 
-        if (!passwordEncoder.matches(usuario.getPassword(), hashPassword))
+        if (!passwordEncoder.matches(dto.getPassword(), usuario.getPassword()))
             throw new NotFoundException("Usuario No Encontrado");
 
         return jwtUtil.generaToken(usuario);
