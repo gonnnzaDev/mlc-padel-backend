@@ -1,5 +1,6 @@
 package com.gonnnza.mlc_backend.DTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.gonnnza.mlc_backend.Model.Categoria;
@@ -19,9 +20,9 @@ public class ActualizarProductoDTO {
     @PositiveOrZero(message = "El stock no puede ser un número negativo")
     private Integer stock;
 
-    private Double precioLista;
+    private BigDecimal precioLista;
 
-    private Double precioFinal;
+    private BigDecimal precioFinal;
     
     private Categoria categoria;
 

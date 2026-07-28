@@ -24,7 +24,7 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String rol;
+    private String nombre;
 
     @OneToMany(mappedBy = "categoria")
     private Set<Producto> productos;

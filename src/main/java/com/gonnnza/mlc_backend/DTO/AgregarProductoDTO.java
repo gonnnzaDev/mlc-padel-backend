@@ -1,5 +1,6 @@
 package com.gonnnza.mlc_backend.DTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.gonnnza.mlc_backend.Model.Categoria;
@@ -26,10 +27,10 @@ public class AgregarProductoDTO {
     private Integer stock;
 
     @NotNull(message = "El precio de lista es obligatorio")
-    private Double precioLista;
+    private BigDecimal precioLista;
 
     @NotNull(message = "El precio final es obligatorio")
-    private Double precioFinal;
+    private BigDecimal precioFinal;
     
     @NotNull(message = "La categoria es obligatoria")
     private Categoria categoria;

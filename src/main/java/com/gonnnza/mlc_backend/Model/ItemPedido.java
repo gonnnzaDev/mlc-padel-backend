@@ -1,49 +1,51 @@
-package com.gonnnza.mlc_backend.Model;
+    package com.gonnnza.mlc_backend.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+    import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+    import jakarta.persistence.Column;
+    import jakarta.persistence.Entity;
+    import jakarta.persistence.FetchType;
+    import jakarta.persistence.GeneratedValue;
+    import jakarta.persistence.GenerationType;
+    import jakarta.persistence.Id;
+    import jakarta.persistence.JoinColumn;
+    import jakarta.persistence.ManyToOne;
+    import jakarta.persistence.Table;
+    import lombok.AllArgsConstructor;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "pedidos")
+    import java.math.BigDecimal;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+    @Entity
+    @Table(name = "pedidos")
 
-// esto seria pedido / compra realizada
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
 
-public class ItemPedido {
+    // esto seria pedido / compra realizada
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public class ItemPedido {
 
-    @Column(name = "producto_id")
-    private Long productoId;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    @Column(name = "producto_nombre")
-    private String productoNombre;
+        @Column(name = "producto_id")
+        private Long productoId;
 
-    @Column(name = "precio_unitario")
-    private Double precioUnitario;
+        @Column(name = "producto_nombre")
+        private String productoNombre;
 
-    private Integer cantidad;
+        @Column(name = "precio_unitario")
+        private BigDecimal precioUnitario;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pedido_id")
-    private PedidoTicket ticket;
+        private Integer cantidad;
 
-}
+        @JsonIgnore
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "pedido_id")
+        private PedidoTicket ticket;
+
+    }

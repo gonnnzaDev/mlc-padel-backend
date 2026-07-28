@@ -8,26 +8,32 @@ import com.gonnnza.mlc_backend.Model.Usuario;
 import com.gonnnza.mlc_backend.Repository.CarritoRepo;
 import com.gonnnza.mlc_backend.Repository.UsuarioRepo;
 
+import com.gonnnza.mlc_backend.Security.AuthService;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @AllArgsConstructor
 public class CarritoService {
 
     private final CarritoRepo repo;
     private final UsuarioRepo usuarioRepo;
+    private final AuthService auth;
 
     public Carrito buscarCarritoDeUsuario(Long usuarioId) {
         Usuario usuario = usuarioRepo
                 .findById(usuarioId)
                 .orElseThrow(
-                        () -> new NotFoundException("Ese usuario asociado a ese carrito no existe"));
+                        () -> new NotFoundException("No existe ese usuario"));
 
-        return repo.findByUsuario(usuario);
+        return repo
+                .findByUsuario(usuario)
+                .orElseThrow(() -> new NotFoundException("Este usuario no tiene carrito"));
     }
 
-    public void agregarProductoAlCarrito(Producto producto, Integer cantidad, Long usuarioId) {
-
-        Carrito carrito = buscarCarritoDeUsuario(usuarioId);
+    public void agregarProductoAlCarrito(Producto producto, Integer cantidad) {
+        Usuario usuario = auth.getUsuarioActivo();
+        Carrito carrito = buscarCarritoDeUsuario(usuario.getId());
 
         // preparo el producto para el carrito
         ItemCarrito aux = new ItemCarrito();
@@ -49,9 +55,11 @@ public class CarritoService {
         repo.save(carrito);
     }
 
-    public void sacarProductoDeCarrito(Long productoId, Integer cantidad, Long usuarioId) {
+    public void sacarProductoDeCarrito(Long productoId, Integer cantidad) {
 
-        Carrito carrito = buscarCarritoDeUsuario(usuarioId);
+        Usuario usuario = auth.getUsuarioActivo();
+
+        Carrito carrito = buscarCarritoDeUsuario(usuario.getId());
 
         ItemCarrito existente = carrito.getProductos()
                 .stream()

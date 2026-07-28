@@ -8,23 +8,32 @@ import com.gonnnza.mlc_backend.DTO.AgregarProductoDTO;
 import com.gonnnza.mlc_backend.DTO.ProductoAdminGestionDTO;
 import com.gonnnza.mlc_backend.DTO.ProductoArticuloDTO;
 import com.gonnnza.mlc_backend.Exceptions.NotFoundException;
+import com.gonnnza.mlc_backend.Model.Categoria;
 import com.gonnnza.mlc_backend.Model.Producto;
+import com.gonnnza.mlc_backend.Repository.CategoriaRepo;
 import com.gonnnza.mlc_backend.Repository.ProductoRepo;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
+@Service
 
 public class ProductoService {
 
     private final ProductoRepo repo;
+    private final CategoriaRepo categoriaRepo;
 
     public List<Producto> listarProductos() {
         return repo.findAll();
     }
 
     public List<Producto> listarProductosDeUnaCategoria(String categoria) {
-        return repo.findAllByCategoria(categoria.toUpperCase());
+        Categoria categoriaObject = categoriaRepo.
+                findByNombre(categoria).orElseThrow(() ->
+                        new NotFoundException("No existe esa categoria")
+                        );
+        return repo.findAllByCategoria(categoriaObject);
     }
 
     public List<ProductoAdminGestionDTO> listarProductosApartadoAdmin() {
@@ -62,7 +71,6 @@ public class ProductoService {
     public void guardarProducto(AgregarProductoDTO productoDTO) {
 
         Producto producto = new Producto();
-
         producto.setCategoria(productoDTO.getCategoria());
         producto.setNombre(productoDTO.getNombre());
         producto.setFechaDeAgregado(LocalDate.now());

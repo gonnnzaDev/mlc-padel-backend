@@ -1,5 +1,6 @@
 package com.gonnnza.mlc_backend.Model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,10 +44,10 @@ public class Producto {
     private Integer stock;
 
     @Column(name = "precio_lista")
-    private Double precioLista;
+    private BigDecimal precioLista;
 
     @Column(name = "precio_final")
-    private Double precioFinal;
+    private BigDecimal precioFinal;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")

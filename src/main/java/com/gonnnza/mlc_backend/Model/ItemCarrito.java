@@ -10,14 +10,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 
 @Entity
 @Table(name = "productos_carrito")
-public class ItemCarrito
+public class ItemCarrito{
 
     @Id
     @GeneratedValue
