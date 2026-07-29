@@ -10,7 +10,8 @@ import com.gonnnza.mlc_backend.Model.Producto;
 
 @Repository
 public interface ProductoRepo extends JpaRepository<Producto, Long> {
+
     List<Producto> findAllByCategoria(Categoria categoria);
 
-    //aca hay que hacer el search
+    List<Producto> findByNombreContainingIgnoreCase(String nombreProducto);
 }

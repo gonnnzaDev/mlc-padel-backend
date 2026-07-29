@@ -1,6 +1,7 @@
 package com.gonnnza.mlc_backend.Config;
 
 import com.gonnnza.mlc_backend.Security.JwtFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -18,10 +20,13 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity // -> permite usar preAuthorize
+@AllArgsConstructor
+
 public class SecurityConfig {
-    @Autowired
-    private JwtFilter jwtFilter;
+
+    private final JwtFilter jwtFilter;
+    private final AccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -31,12 +36,24 @@ public class SecurityConfig {
                         cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests
                         (auth -> auth
-                                .requestMatchers("/usuarios/**",
+                                .requestMatchers(
+                                        "/usuarios/**",
                                         "/productos/**",
-                                        "/categorias/**").permitAll()
-                                .anyRequest().authenticated()
+                                        "/categorias/**",
+                                        "/v3/api-docs/**",
+                                        "/pagos/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html"
+
+                                        ).permitAll()
+                                .anyRequest()
+                                .authenticated()
                         )
+                //para que se ejectue el jwtfilter antes que el default
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                //este es para que me deje ver mi error personalizado
+                .exceptionHandling(e -> e
+                        .accessDeniedHandler(accessDeniedHandler))
                 .build();
     }
 
@@ -61,6 +78,8 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
+
 
 
 }

@@ -7,10 +7,14 @@ import com.gonnnza.mlc_backend.Model.Categoria;
 import com.gonnnza.mlc_backend.Model.Imagen;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+
+/* Formulario en admin agregar producto */
 
 @AllArgsConstructor
 @Data
@@ -37,6 +41,7 @@ public class AgregarProductoDTO {
     @NotNull(message = "Indica si es importado o no")
     private Boolean importado;
 
+    @NotEmpty(message = "Debe haber al menos una imagen")
     private List<Imagen> imagenes;
 
 }

@@ -3,11 +3,12 @@ package com.gonnnza.mlc_backend.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.gonnnza.mlc_backend.DTO.GuardarPedidoTicketDTO;
+import com.gonnnza.mlc_backend.DTO.CarritoDesdeFrontDTO;
 import com.gonnnza.mlc_backend.Enum.EstadoEnum;
+import com.gonnnza.mlc_backend.Exceptions.BadRequestException;
 import com.gonnnza.mlc_backend.Exceptions.NotFoundException;
-import com.gonnnza.mlc_backend.Model.ItemPedido;
-import com.gonnnza.mlc_backend.Model.PedidoTicket;
+import com.gonnnza.mlc_backend.Model.Pedido;
+import com.gonnnza.mlc_backend.Model.Ticket;
 import com.gonnnza.mlc_backend.Model.Usuario;
 import com.gonnnza.mlc_backend.Repository.TicketRepo;
 
@@ -15,71 +16,102 @@ import com.gonnnza.mlc_backend.Security.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+/*Ticket de los pedidos*/
+
+
 @Service
 @AllArgsConstructor
 public class TicketService {
 
     private final TicketRepo ticketRepo;
     private final AuthService auth;
-    private final PedidoService pedidoService;
 
-    public List<PedidoTicket> listarTickets() {
+    //GET-----------------------------------------------------------------------------
+
+    public Ticket buscarTicketPorId(Long id) {
+        return ticketRepo
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("No existe ese ticket pedido")
+                );
+    }
+
+    public List<Ticket> listarTickets() {
         return ticketRepo.findAll();
     }
 
-    public List<PedidoTicket> listarTicketsFiltradosPorEstado(String estado) {
-        List<PedidoTicket> lista;
+    public List<Ticket> listarTicketsFiltradosPorEstado(String estado) {
+        List<Ticket> lista;
 
-        if (estado.equals(EstadoEnum.CANCELADO.toString())) lista = ticketRepo.findAllByEstado(EstadoEnum.CANCELADO);
-        else if (estado.equals(EstadoEnum.CONFIRMADO.toString()))
-            lista = ticketRepo.findAllByEstado(EstadoEnum.CONFIRMADO);
+        if (estado.equals(EstadoEnum.CANCELADO.toString()))
+            lista = ticketRepo.findAllByEstado(EstadoEnum.CANCELADO);
         else if (estado.equals(EstadoEnum.RECHAZADO.toString()))
             lista = ticketRepo.findAllByEstado(EstadoEnum.RECHAZADO);
         else if (estado.equals(EstadoEnum.PAGADO.toString()))
             lista = ticketRepo.findAllByEstado(EstadoEnum.PAGADO);
-        else lista = ticketRepo.findAllByEstado(EstadoEnum.PENDIENTE);
+        else if (estado.equals(EstadoEnum.REALIZADO.toString()))
+            lista = ticketRepo.findAllByEstado(EstadoEnum.REALIZADO);
+        else
+            lista = ticketRepo.findAllByEstado(EstadoEnum.PENDIENTE);
 
         return lista;
     }
 
+    //PUT-----------------------------------------------------------------------------
+    //Solo que pueda modificar los estados de el ticket
 
-    public void confirmarTicketPedido(Long id) {
-        modificarEstadoPedido(id, EstadoEnum.CONFIRMADO);
+    public void modificarEstadoPedido(Long id, EstadoEnum estado) throws NotFoundException {
 
+        Ticket ticket = buscarTicketPorId(id);
+
+        if (ticket.getEstado().equals(EstadoEnum.RECHAZADO))
+            throw new BadRequestException("No se puede modificar el estado a un Pedido rechazado");
+
+        if (estado == null)
+            throw new BadRequestException("El estado No existe");
+
+        if (ticket.getEstado().equals(estado)) return;
+
+        ticket.setEstado(estado);
+
+        ticketRepo.save(ticket);
     }
 
-    public void pendienteTicketPedido(Long id) {
 
-        modificarEstadoPedido(id, EstadoEnum.PENDIENTE);
-    }
-
-    public void cancelarTicketPedido(Long id) {
-
-        modificarEstadoPedido(id, EstadoEnum.CANCELADO);
-    }
-    public void marcarComoPagadoTicketPedido(Long id) {
+    public void marcarComoPagadoTicketPagado(Long id) {
 
         modificarEstadoPedido(id, EstadoEnum.PAGADO);
     }
+
 
     public void rechazarTicketPedido(Long id) {
 
         modificarEstadoPedido(id, EstadoEnum.RECHAZADO);
     }
+    // Estos 2 son los que va a poder interactuar el admin - empleado
 
-    public PedidoTicket buscarTicketPorid(Long id) {
-        return ticketRepo.findById(id).orElseThrow(() -> new NotFoundException("No existe ese ticket"));
+    public void marcarComoRealizado(Long id) {
 
+        modificarEstadoPedido(id, EstadoEnum.REALIZADO);
     }
 
-    public PedidoTicket buscarPedidoTicketPorUsuario(Usuario usuario) {
 
-        return ticketRepo.findByUsuario(usuario);
+    public void cancelarTicketPedido(Long id) {
+
+        modificarEstadoPedido(id, EstadoEnum.CANCELADO);
     }
 
-    public PedidoTicket transformarGuardarPedidoTicketDTO(GuardarPedidoTicketDTO dto) {
+    //POST------------------------------------------------------------------------------
+
+
+    public Ticket transformarCarritoDesdeFrontDTO(CarritoDesdeFrontDTO dto) {
+
+        if (dto == null)
+            throw new BadRequestException("El carrito no existe");
+
         Usuario usuario = auth.getUsuarioActivo();
-        PedidoTicket ticket = new PedidoTicket();
+        Ticket ticket = new Ticket();
         ticket.setUsuario(usuario);
         ticket.setDireccion(dto.getDireccion());
         ticket.setCiudad(dto.getCiudad());
@@ -90,9 +122,9 @@ public class TicketService {
         ticket.setPreciototal(dto.getPrecioTotal());
         ticket.setEstado(EstadoEnum.PENDIENTE);
         ticket.setFechaRealizado(LocalDateTime.now());
-        List<ItemPedido> productos = dto.getItems().stream().map(producto -> {
+        List<Pedido> productos = dto.getItems().stream().map(producto -> {
 
-            ItemPedido item = new ItemPedido();
+            Pedido item = new Pedido();
             item.setProductoId(producto.getProductoId());
             item.setProductoNombre(producto.getProductoNombre());
             item.setCantidad(producto.getCantidad());
@@ -107,20 +139,13 @@ public class TicketService {
         return ticket;
     }
 
-    //este guarda el ticket post pagar
-    public PedidoTicket generarTicket(PedidoTicket ticket) {
+    public Ticket generarTicket(Ticket ticket) {
+        if (ticket == null)
+            throw new BadRequestException("El ticket no existe");
+
 
         return ticketRepo.save(ticket);
     }
 
-    public void modificarEstadoPedido(Long id, EstadoEnum estado) throws NotFoundException {
-        PedidoTicket ticket = ticketRepo.findById(id).orElseThrow(() -> new NotFoundException("No existe ese ticket pedido"));
-
-        if (ticket.getEstado().equals(estado)) return;
-
-        ticket.setEstado(estado);
-
-        ticketRepo.save(ticket);
-    }
 
 }

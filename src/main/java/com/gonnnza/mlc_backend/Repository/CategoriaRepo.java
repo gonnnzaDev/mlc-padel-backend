@@ -8,6 +8,7 @@ import com.gonnnza.mlc_backend.Model.Categoria;
 import java.util.Optional;
 
 @Repository
-public interface CategoriaRepo extends JpaRepository<Categoria,  Long> {
+public interface CategoriaRepo extends JpaRepository<Categoria, Integer> {
     Optional<Categoria> findByNombre(String nombre);
+
 }

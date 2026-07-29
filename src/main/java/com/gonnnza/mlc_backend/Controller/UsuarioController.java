@@ -18,24 +18,8 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioLoginDTO dto) {
+
         String token = service.login(dto);
-
-        //esto me lo recomendo chatgpt para no tener que mandar el
-        //token cada vez y es mas seguro testear
-
-        Cookie cookie = new Cookie("token", token);
-        //javascript no lo puede leer
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(24 * 60 * 60);
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(Map.of("token", token, "mensaje", "Login exitoso"));
-
-        /* Testear sino sacar lo de cokies y poner este return =3
         return ResponseEntity.ok().body(token);
-        * */
     }
 }

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.gonnnza.mlc_backend.Model.Usuario;
 
 @Repository
-public interface UsuarioRepo extends JpaRepository<Usuario, Long>{
+public interface UsuarioRepo extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
 }

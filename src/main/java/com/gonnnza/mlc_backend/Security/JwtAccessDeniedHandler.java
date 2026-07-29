@@ -8,18 +8,20 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-
+/*Esto es lo que se ve si alguien intenta
+utilizar el endpoint y no esta logeado con
+ una cuenta con admin
+*/
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
-        @Override
-        public void handle(HttpServletRequest request, HttpServletResponse response,
-                           AccessDeniedException accessDeniedException) throws IOException {
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response,
+                       AccessDeniedException accessDeniedException) throws IOException {
 
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.setContentType("text/plain");
-
-            response.getWriter().write("No tenes permisos");
-        }
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("text/plain");
+        response.getWriter().write("No tenes permisos");
+    }
 
 }

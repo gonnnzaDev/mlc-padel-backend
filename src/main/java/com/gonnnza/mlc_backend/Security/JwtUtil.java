@@ -1,20 +1,22 @@
 package com.gonnnza.mlc_backend.Security;
+
 import org.springframework.beans.factory.annotation.Value;
 import com.gonnnza.mlc_backend.Model.Usuario;
 import io.jsonwebtoken.*;
+
 import java.util.Date;
+
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
 import java.security.Key;
 
 @Component
-
 public class JwtUtil {
 
     @Value("${jwt.key}")
     private String key;
-
 
     private Key getKey() {
         return Keys.hmacShaKeyFor(key.getBytes());

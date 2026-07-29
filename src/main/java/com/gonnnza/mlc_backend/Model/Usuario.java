@@ -20,19 +20,19 @@ import lombok.NoArgsConstructor;
 @Table(name = "usuarios")
 
 public class Usuario {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nombre;
-    
+
     private String email;
 
     private String direccion;
 
     private String telefono;
-    
+
     private String password;
 
     @Enumerated(EnumType.STRING)

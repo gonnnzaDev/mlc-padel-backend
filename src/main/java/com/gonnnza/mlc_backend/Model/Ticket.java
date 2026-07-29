@@ -29,7 +29,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "ticket")
 
-public class PedidoTicket {
+//Este seria el ticket de todos los pedidos o productos individuales pedidos
+public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -65,5 +66,5 @@ public class PedidoTicket {
     private BigDecimal preciototal;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemPedido> pedidos;
+    private List<Pedido> pedidos;
 }

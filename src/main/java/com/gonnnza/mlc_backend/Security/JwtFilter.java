@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
 import java.io.IOException;
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     @Autowired
@@ -29,45 +30,52 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String token = null;
-        String email = null;
+        try {
 
-        //esto es lo q viene del fetch
-        final String authHeader = request.getHeader("Authorization");
+            String token = null;
+            String email = null;
 
-        //verifica si el token llego
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
-            email = jwtUtil.obtenerEmail(token);
-        }
+            //esto es lo q viene del fetch
+            final String authHeader = request.getHeader("Authorization");
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-
-            // si es valido el token, lo carga
-            if (jwtUtil.esValido(token, userDetails)) {
-
-                //objeto de autenticacion
-                // (osea lo q nos va a permitir guardar la autenticacion en spring/backend)
-
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
-                //esto le agrega detalles del request al objeto
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-
-                //guarda la autenticacion en spring
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            //verifica si el token llego
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                token = authHeader.substring(7);
+                email = jwtUtil.obtenerEmail(token);
             }
+
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+                // si es valido el token, lo carga
+                if (jwtUtil.esValido(token, userDetails)) {
+
+                    //objeto de autenticacion
+                    // (osea lo q nos va a permitir guardar la autenticacion en spring/backend)
+
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
+                    //esto le agrega detalles del request al objeto
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+
+                    //guarda la autenticacion en spring
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+            //para que no se cuelguen las request
+            filterChain.doFilter(request, response);
+        } catch (io.jsonwebtoken.JwtException | IllegalArgumentException e) {
+            response.setStatus(401);
+            response.getWriter().write("Token inválido o expirado");
+            return;
         }
-        //para que no se cuelguen las request
-        filterChain.doFilter(request, response);
 
     }
-}
+    }

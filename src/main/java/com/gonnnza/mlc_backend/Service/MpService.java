@@ -1,7 +1,7 @@
 package com.gonnnza.mlc_backend.Service;
 
-import com.gonnnza.mlc_backend.Model.Carrito;
-import com.gonnnza.mlc_backend.Model.PedidoTicket;
+import com.gonnnza.mlc_backend.DTO.CarritoDesdeFrontDTO;
+import com.gonnnza.mlc_backend.Model.Ticket;
 import com.gonnnza.mlc_backend.Security.AuthService;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
@@ -23,30 +23,26 @@ public class MpService {
 
     @Value("${mercadopago.access-token}")
     private String tokenMp;
-
     private final TicketService ticketService;
-    private final AuthService auth;
 
-    public MpService(TicketService ticketService, AuthService auth) {
+    public MpService(TicketService ticketService) {
         this.ticketService = ticketService;
-        this.auth = auth;
     }
 
-    public String pagar(PedidoTicket ticket)
+    public String generarUrlDePago(Ticket ticket, CarritoDesdeFrontDTO carrito)
             throws MPException, MPApiException {
 
         MercadoPagoConfig.setAccessToken(tokenMp);
-        Carrito carrito = auth.getCarritoDeUsuarioActivo();
 
         List<PreferenceItemRequest> items = carrito
-                .getProductos()
+                .getItems()
                 .stream()
                 .map(i ->
                         PreferenceItemRequest.builder()
-                                .title(i.getProducto().getNombre())
+                                .title(i.getProductoNombre())
                                 .quantity(i.getCantidad())
                                 .currencyId("ARS")
-                                .unitPrice(i.getProducto().getPrecioFinal())
+                                .unitPrice(i.getPrecioUnitario())
                                 .build()
                 ).toList();
 
@@ -62,22 +58,22 @@ public class MpService {
         return preference.getInitPoint();
     }
 
-    public String procesarWebhook(Long pagoId) throws MPException, MPApiException {
+
+    //notificacion que manda mp al back post pago si fue exitosa o fracaso
+    public String procesarWebhook(Long pagoId)
+            throws MPException, MPApiException {
 
         MercadoPagoConfig.setAccessToken(tokenMp);
         PaymentClient client = new PaymentClient();
         Payment payment = client.get(pagoId);
-
         Long ticketId = Long.valueOf(payment.getExternalReference());
 
         if (!"approved".equals(payment.getStatus())) {
-
             ticketService.rechazarTicketPedido(ticketId);
             return "Error al realizar el pago\n";
         }
 
-
-        ticketService.marcarComoPagadoTicketPedido(ticketId);
+        ticketService.marcarComoPagadoTicketPagado(ticketId);
         return "Pago exitoso\n";
     }
 }

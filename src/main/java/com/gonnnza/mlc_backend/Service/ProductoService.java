@@ -7,48 +7,52 @@ import com.gonnnza.mlc_backend.DTO.ActualizarProductoDTO;
 import com.gonnnza.mlc_backend.DTO.AgregarProductoDTO;
 import com.gonnnza.mlc_backend.DTO.ProductoAdminGestionDTO;
 import com.gonnnza.mlc_backend.DTO.ProductoArticuloDTO;
+import com.gonnnza.mlc_backend.Exceptions.BadRequestException;
 import com.gonnnza.mlc_backend.Exceptions.NotFoundException;
 import com.gonnnza.mlc_backend.Model.Categoria;
+import com.gonnnza.mlc_backend.Model.Imagen;
 import com.gonnnza.mlc_backend.Model.Producto;
 import com.gonnnza.mlc_backend.Repository.CategoriaRepo;
+import com.gonnnza.mlc_backend.Repository.ImagenRepo;
 import com.gonnnza.mlc_backend.Repository.ProductoRepo;
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
 
+// CRUD
+
 public class ProductoService {
 
-    private final ProductoRepo repo;
-    private final CategoriaRepo categoriaRepo;
+    private final ProductoRepo productoRepo;
+    private final CategoriaService categoriaService;
+    private final ImagenRepo imagenRepo;
+
+    //GETS-----------------------------------------------------------------------------------------------
 
     public List<Producto> listarProductos() {
-        return repo.findAll();
+
+        return productoRepo.findAll();
     }
 
     public List<Producto> listarProductosDeUnaCategoria(String categoria) {
-        Categoria categoriaObject = categoriaRepo.
-                findByNombre(categoria).orElseThrow(() ->
-                        new NotFoundException("No existe esa categoria")
-                        );
-        return repo.findAllByCategoria(categoriaObject);
+        Categoria categoriaObject = categoriaService.buscarCategoriaPorNombre(categoria);
+
+        return productoRepo.findAllByCategoria(categoriaObject);
     }
 
     public List<ProductoAdminGestionDTO> listarProductosApartadoAdmin() {
-        return repo
+        return productoRepo
                 .findAll()
                 .stream()
                 .map(p -> new ProductoAdminGestionDTO(
                         p.getNombre(), p.getStock(), p.getId()))
                 .toList();
-
-        // hacer una consulta que pase solo la id y el nombre;
     }
 
     public List<ProductoArticuloDTO> listarProductosEnArticulos() {
-        return repo
+        return productoRepo
                 .findAll()
                 .stream()
                 .map(p -> new ProductoArticuloDTO(
@@ -59,16 +63,20 @@ public class ProductoService {
                         p.getId()))
                 .toList();
 
-        // hacer una consulta que pase solo la id y el nombre;
     }
 
     public Producto buscarProductoPorId(Long id) throws NotFoundException {
-        return repo
+        return productoRepo
                 .findById(id)
-                .orElseThrow(() -> new NotFoundException("No se puede actualizar: no existe el producto con ID " + id));
+                .orElseThrow(() -> new NotFoundException("no existe el producto con ID " + id));
     }
+    //pOST-----------------------------------------------------------------------------------------------
+
 
     public void guardarProducto(AgregarProductoDTO productoDTO) {
+
+        if (productoDTO == null)
+            throw new BadRequestException("No existe ese producto");
 
         Producto producto = new Producto();
         producto.setCategoria(productoDTO.getCategoria());
@@ -81,20 +89,45 @@ public class ProductoService {
         producto.setPrecioLista(productoDTO.getPrecioLista());
         producto.setStock(productoDTO.getStock());
 
-        repo.save(producto);
+        productoRepo.save(producto);
     }
+    public List<Producto> buscarProductos(String nombreProducto) {
+        return productoRepo.findByNombreContainingIgnoreCase(nombreProducto);
+    }
+
+    //DELETE-----------------------------------------------------------------------------------------------
 
     public void eliminarProducto(Long id) throws NotFoundException {
 
-        if (!repo.existsById(id))
-            throw new NotFoundException("No se puede actualizar: no existe el producto con ID " + id);
+        if (!productoRepo.existsById(id))
+            throw new NotFoundException("no existe el producto con ID " + id);
 
-        repo.deleteById(id);
+        productoRepo.deleteById(id);
     }
+
+
+    public void eliminarFotoDeProducto(Long idProducto, Long idImagen) {
+
+        if (!productoRepo.existsById(idProducto))
+            throw new NotFoundException("Ese producto no existe");
+
+        if (!imagenRepo.existsById(idImagen))
+            throw new NotFoundException("Esa imagen no existe");
+
+        imagenRepo.deleteById(idImagen);
+
+
+    }
+
+    //PUT-----------------------------------------------------------------------------------------------
 
     public Producto actualizarProducto(Long id, ActualizarProductoDTO dto) throws NotFoundException {
 
-        Producto productoExistente = repo.findById(id)
+        if (dto == null)
+            throw new BadRequestException("El Producto no existe");
+
+
+        Producto productoExistente = productoRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("No se puede actualizar: no existe el producto con ID " + id));
 
         if (dto.getNombre() != null) {
@@ -120,11 +153,14 @@ public class ProductoService {
         }
 
         if (dto.getImagenes() != null) {
-            productoExistente.getImagenes().clear();
+
+            if (productoExistente.getImagenes() != null) {
+                productoExistente.getImagenes().clear();
+            }
             productoExistente.setImagenes(dto.getImagenes());
         }
 
-        return repo.save(productoExistente);
+        return productoRepo.save(productoExistente);
     }
 
 }

@@ -13,21 +13,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-
 @Entity
 @Table(name = "categorias")
 public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String nombre;
 
     @JsonIgnore
     @OneToMany(mappedBy = "categoria")
     private Set<Producto> productos;
+
+    public Categoria(String nombre) {
+        this.nombre = nombre;
+    }
 }

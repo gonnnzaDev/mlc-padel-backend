@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 
 
+// Vista mini o resumen de los productos en el apartado /admin
 public class ProductoAdminGestionDTO {
 
     private String nombre;

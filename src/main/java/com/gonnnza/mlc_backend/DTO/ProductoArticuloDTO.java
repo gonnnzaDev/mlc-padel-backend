@@ -11,8 +11,11 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
+
+// El producto en el index
 public class ProductoArticuloDTO {
-    
+
     private Imagen fotoPrincipal;
     private String nombre;
     private BigDecimal precioLista;

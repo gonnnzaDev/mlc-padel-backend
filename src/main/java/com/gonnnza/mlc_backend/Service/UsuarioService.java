@@ -1,7 +1,8 @@
 package com.gonnnza.mlc_backend.Service;
 
-import com.gonnnza.mlc_backend.Config.SecurityConfig;
 import com.gonnnza.mlc_backend.DTO.UsuarioLoginDTO;
+import com.gonnnza.mlc_backend.Exceptions.BadRequestException;
+import com.gonnnza.mlc_backend.Exceptions.CredentialsException;
 import com.gonnnza.mlc_backend.Security.JwtUtil;
 import com.gonnnza.mlc_backend.Exceptions.NotFoundException;
 import com.gonnnza.mlc_backend.Model.Usuario;
@@ -21,11 +22,14 @@ public class UsuarioService {
 
     public String login(UsuarioLoginDTO dto) {
 
+        if (dto == null)
+            throw new BadRequestException("Usuario nulo -> No fue recibido un usuario");
+
         String email = dto.getEmail();
         Usuario usuario = buscarUsuarioPorEmail(email);
 
         if (!passwordEncoder.matches(dto.getPassword(), usuario.getPassword()))
-            throw new NotFoundException("Usuario No Encontrado");
+            throw new CredentialsException("Usuario No Encontrado");
 
         return jwtUtil.generaToken(usuario);
     }
@@ -34,7 +38,6 @@ public class UsuarioService {
         return repo
                 .findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Usuario No encontrado"));
-
     }
 
 }

@@ -8,8 +8,10 @@ import com.gonnnza.mlc_backend.Model.Imagen;
 
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
+
 @Data
 
+/* Para Actualizar en el apartado de admin */
 
 public class ActualizarProductoDTO {
 
@@ -23,7 +25,7 @@ public class ActualizarProductoDTO {
     private BigDecimal precioLista;
 
     private BigDecimal precioFinal;
-    
+
     private Categoria categoria;
 
     private Boolean importado;
