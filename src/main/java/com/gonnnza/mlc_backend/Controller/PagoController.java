@@ -28,10 +28,12 @@ public class PagoController {
     public ResponseEntity<?> generarUrlDePago(@RequestBody CarritoDesdeFrontDTO dto) throws MPException, MPApiException {
         //Esto es para no tener que convertirlo 2 veces
         Ticket ticket = ticketService.transformarCarritoDesdeFrontDTO(dto);
-
         //Logica del endpoint
         //Genero ticket -> genera el link de pago -> retorna el link
         ticketService.generarTicket(ticket);
+
+        ticketService.marcarComoPagadoTicketPendiente(ticket.getId());
+
         String urlPago = mpService.generarUrlDePago(ticket, dto);
 
         return ResponseEntity.ok().body(urlPago);

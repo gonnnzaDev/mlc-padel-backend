@@ -26,13 +26,16 @@ public class ProductoController {
     }
 
 
-    //Si el api recibe una categoria filtra sino hace el get con todos
     @GetMapping
-    public ResponseEntity<?> listarProductos(@RequestParam(required = false) String categoria) {
-        if (categoria != null) {
-            return ResponseEntity.ok().body(service.listarProductosDeUnaCategoria(categoria));
-        }
+    public ResponseEntity<?> listarProductos() {
+
         return ResponseEntity.ok().body(service.listarProductos());
+    }
+
+    @GetMapping("/articulos/filtrar/{categoria}")
+    public ResponseEntity<?> filtrarProductosPorCategoria(@PathVariable String categoria) {
+
+        return ResponseEntity.ok().body(service.listarProductosDeUnaCategoria(categoria));
     }
 
     //Buscador
@@ -68,15 +71,15 @@ public class ProductoController {
     @DeleteMapping("/{producto_id}/imagen/{imagen_id}")
     public ResponseEntity<?> eliminarFotoDeProducto(
             @PathVariable("producto_id") Long productoId,
-            @PathVariable("imagen_id") Long imagenId)
-    {
+            @PathVariable("imagen_id") Long imagenId) {
         service.eliminarFotoDeProducto(productoId, imagenId);
         return ResponseEntity.ok().body("Eliminado con exito");
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @Valid @RequestBody ActualizarProductoDTO dto) {
+    public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @Valid @RequestBody ActualizarProductoDTO
+            dto) {
         service.actualizarProducto(id, dto);
         return ResponseEntity.ok().body("Actualizado con exito");
     }

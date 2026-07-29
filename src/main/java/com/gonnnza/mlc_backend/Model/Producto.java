@@ -2,6 +2,7 @@ package com.gonnnza.mlc_backend.Model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -60,15 +61,21 @@ public class Producto {
     private List<Imagen> imagenes;
 
     // setter para imagenes para jpa no tire errores
-    public void setImagenes(List<Imagen> imagenes) {
-        this.imagenes = imagenes;
-
-        if (imagenes == null)
-            return;
-
-        for (Imagen img : imagenes) {
-            img.setProducto(this);
+    public void setImagenes(List<Imagen> nuevasImagenes) {
+        if (this.imagenes == null) {
+            this.imagenes = new ArrayList<>();
+        } else {
+            this.imagenes.clear();
         }
 
+        if (nuevasImagenes == null) {
+            return;
+        }
+
+        for (Imagen img : nuevasImagenes) {
+            img.setProducto(this);
+        }
+        this.imagenes.addAll(nuevasImagenes);
     }
+
 }

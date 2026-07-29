@@ -2,6 +2,7 @@ package com.gonnnza.mlc_backend.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import com.gonnnza.mlc_backend.DTO.ActualizarProductoDTO;
 import com.gonnnza.mlc_backend.DTO.AgregarProductoDTO;
@@ -15,6 +16,7 @@ import com.gonnnza.mlc_backend.Model.Producto;
 import com.gonnnza.mlc_backend.Repository.CategoriaRepo;
 import com.gonnnza.mlc_backend.Repository.ImagenRepo;
 import com.gonnnza.mlc_backend.Repository.ProductoRepo;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,6 @@ public class ProductoService {
 
     private final ProductoRepo productoRepo;
     private final CategoriaService categoriaService;
-    private final ImagenRepo imagenRepo;
 
     //GETS-----------------------------------------------------------------------------------------------
 
@@ -108,20 +109,21 @@ public class ProductoService {
 
     public void eliminarFotoDeProducto(Long idProducto, Long idImagen) {
 
-        if (!productoRepo.existsById(idProducto))
-            throw new NotFoundException("Ese producto no existe");
 
-        if (!imagenRepo.existsById(idImagen))
-            throw new NotFoundException("Esa imagen no existe");
+        Producto producto = buscarProductoPorId(idProducto);
 
-        imagenRepo.deleteById(idImagen);
+        boolean removido = producto.getImagenes().removeIf(img -> img.getId().equals(idImagen));
 
+        if (!removido)
+            throw new NotFoundException("Esa imagen no está asociada a este producto");
+
+        productoRepo.save(producto);
 
     }
 
     //PUT-----------------------------------------------------------------------------------------------
 
-    public Producto actualizarProducto(Long id, ActualizarProductoDTO dto) throws NotFoundException {
+    public void actualizarProducto(Long id, ActualizarProductoDTO dto) throws NotFoundException {
 
         if (dto == null)
             throw new BadRequestException("El Producto no existe");
@@ -151,16 +153,34 @@ public class ProductoService {
         if (dto.getImportado() != null) {
             productoExistente.setImportado(dto.getImportado());
         }
-
         if (dto.getImagenes() != null) {
-
-            if (productoExistente.getImagenes() != null) {
-                productoExistente.getImagenes().clear();
+            for (Imagen nuevaImagen : dto.getImagenes()) {
+                nuevaImagen.setProducto(productoExistente);
+                productoExistente.getImagenes().add(nuevaImagen);
             }
-            productoExistente.setImagenes(dto.getImagenes());
         }
 
-        return productoRepo.save(productoExistente);
+        productoRepo.save(productoExistente);
     }
 
+    //transaccional para sumar y restar stock despues del momento de transsaccion
+    @Transactional
+    public void sumarStock(Long productoId, int cantidad) {
+
+        Producto producto = buscarProductoPorId(productoId);
+
+        producto.setStock(producto.getStock() + cantidad);
+
+        productoRepo.save(producto);
+    }
+
+    @Transactional
+    public void restarStock(Long productoId, int cantidad) {
+
+        Producto producto = buscarProductoPorId(productoId);
+
+        producto.setStock(producto.getStock() - cantidad);
+
+        productoRepo.save(producto);
+    }
 }

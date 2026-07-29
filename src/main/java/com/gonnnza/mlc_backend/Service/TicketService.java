@@ -26,6 +26,7 @@ public class TicketService {
 
     private final TicketRepo ticketRepo;
     private final AuthService auth;
+    private final ProductoService productoService;
 
     //GET-----------------------------------------------------------------------------
 
@@ -38,8 +39,13 @@ public class TicketService {
     }
 
     public List<Ticket> listarTickets() {
+        return ticketRepo.findAll().stream().filter(a -> a.getEstado() != EstadoEnum.PENDIENTE && a.getEstado() != EstadoEnum.PROCESANDOSE).toList();
+    }
+
+    public List<Ticket> listarTodosLosTickets() {
         return ticketRepo.findAll();
     }
+
 
     public List<Ticket> listarTicketsFiltradosPorEstado(String estado) {
         List<Ticket> lista;
@@ -68,6 +74,10 @@ public class TicketService {
         if (ticket.getEstado().equals(EstadoEnum.RECHAZADO))
             throw new BadRequestException("No se puede modificar el estado a un Pedido rechazado");
 
+        if (ticket.getEstado() == EstadoEnum.PAGADO && estado == EstadoEnum.PENDIENTE) {
+            throw new BadRequestException("No se puede volver a pendiente un pedido pagado");
+        }
+
         if (estado == null)
             throw new BadRequestException("El estado No existe");
 
@@ -79,13 +89,44 @@ public class TicketService {
     }
 
 
-    public void marcarComoPagadoTicketPagado(Long id) {
+    public void marcarComoPagadoTicket(Long id) {
+
+        Ticket ticket = buscarTicketPorId(id);
+
+        if (ticket.getEstado() == EstadoEnum.PAGADO) return;
 
         modificarEstadoPedido(id, EstadoEnum.PAGADO);
     }
 
+    public void marcarComoPendienteTicket(Long id) {
+
+        Ticket ticket = buscarTicketPorId(id);
+
+        if (ticket.getEstado() != EstadoEnum.PROCESANDOSE) return;
+
+        ticket.getPedidos().forEach(p -> {
+            productoService.restarStock(
+                    p.getProductoId(),
+                    p.getCantidad()
+            );
+        });
+
+        modificarEstadoPedido(id, EstadoEnum.PENDIENTE);
+    }
+
 
     public void rechazarTicketPedido(Long id) {
+
+        Ticket ticket = buscarTicketPorId(id);
+
+        if (ticket.getEstado() == EstadoEnum.RECHAZADO) return;
+
+        ticket.getPedidos().forEach(p -> {
+            productoService.sumarStock(
+                    p.getProductoId(),
+                    p.getCantidad()
+            );
+        });
 
         modificarEstadoPedido(id, EstadoEnum.RECHAZADO);
     }
@@ -120,7 +161,7 @@ public class TicketService {
         ticket.setNota(dto.getNota());
         ticket.setMetodoPago(dto.getMetodoPago());
         ticket.setPreciototal(dto.getPrecioTotal());
-        ticket.setEstado(EstadoEnum.PENDIENTE);
+        ticket.setEstado(EstadoEnum.PROCESANDOSE); //<-
         ticket.setFechaRealizado(LocalDateTime.now());
         List<Pedido> productos = dto.getItems().stream().map(producto -> {
 

@@ -2,7 +2,6 @@ package com.gonnnza.mlc_backend.Service;
 
 import com.gonnnza.mlc_backend.DTO.CarritoDesdeFrontDTO;
 import com.gonnnza.mlc_backend.Model.Ticket;
-import com.gonnnza.mlc_backend.Security.AuthService;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.client.preference.PreferenceClient;
@@ -64,16 +63,28 @@ public class MpService {
             throws MPException, MPApiException {
 
         MercadoPagoConfig.setAccessToken(tokenMp);
+
         PaymentClient client = new PaymentClient();
         Payment payment = client.get(pagoId);
+
         Long ticketId = Long.valueOf(payment.getExternalReference());
+        String status = payment.getStatus();
 
-        if (!"approved".equals(payment.getStatus())) {
-            ticketService.rechazarTicketPedido(ticketId);
-            return "Error al realizar el pago\n";
+        switch (status) {
+
+            case "approved":
+                ticketService.marcarComoPagadoTicket(ticketId);
+                return "Pago aprobado";
+            case "rejected":
+            case "cancelled":
+                ticketService.rechazarTicketPedido(ticketId);
+                return "Pago rechazado";
+            case "pending":
+            case "in_process":
+                return "Pago pendiente";
+
+            default:
+                return "Estado desconocido";
         }
-
-        ticketService.marcarComoPagadoTicketPagado(ticketId);
-        return "Pago exitoso\n";
     }
 }

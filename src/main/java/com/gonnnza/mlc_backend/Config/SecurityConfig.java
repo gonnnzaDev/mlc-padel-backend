@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,19 +34,18 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors ->
-                        cors.configurationSource(corsConfigurationSource()))
+                        cors.configurationSource(corsConfigurationSource())) //
                 .authorizeHttpRequests
                         (auth -> auth
                                 .requestMatchers(
                                         "/usuarios/**",
-                                        "/productos/**",
+                                        "/productos/**", //<- despues especificar
                                         "/categorias/**",
                                         "/v3/api-docs/**",
                                         "/pagos/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html"
-
-                                        ).permitAll()
+                                ).permitAll()
                                 .anyRequest()
                                 .authenticated()
                         )
@@ -78,8 +78,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-
-
 
 
 }

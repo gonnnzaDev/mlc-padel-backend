@@ -20,6 +20,6 @@ public class UsuarioController {
     public ResponseEntity<?> login(@RequestBody UsuarioLoginDTO dto) {
 
         String token = service.login(dto);
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity.ok().body(Map.of("token", token));
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/pedidos")
 @AllArgsConstructor
@@ -40,14 +42,14 @@ public class PedidoController {
     @GetMapping
     public ResponseEntity<?> verListaDePedidos() {
 
-        return ResponseEntity.ok().body(ticketService.listarTickets());
+        return ResponseEntity.ok().body(Map.of("pedidos", ticketService.listarTickets()));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
     @GetMapping("/{estado}")
     public ResponseEntity<?> verListaDePedidos(@PathVariable String estado) {
 
-        return ResponseEntity.ok().body(ticketService.listarTicketsFiltradosPorEstado(estado));
+        return ResponseEntity.ok().body(Map.of("pedidos", ticketService.listarTicketsFiltradosPorEstado(estado)));
     }
 
 
