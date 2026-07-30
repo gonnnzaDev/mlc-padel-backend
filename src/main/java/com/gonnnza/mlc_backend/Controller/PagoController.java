@@ -32,7 +32,7 @@ public class PagoController {
         //Genero ticket -> genera el link de pago -> retorna el link
         ticketService.generarTicket(ticket);
 
-        ticketService.marcarComoPagadoTicketPendiente(ticket.getId());
+        ticketService.marcarComoPagadoTicket(ticket.getId());
 
         String urlPago = mpService.generarUrlDePago(ticket, dto);
 
