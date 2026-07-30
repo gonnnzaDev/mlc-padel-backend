@@ -3,6 +3,7 @@ package com.gonnnza.mlc_backend.Security;
 import com.gonnnza.mlc_backend.Model.Usuario;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +41,23 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = null;
             String email = null;
 
-            //esto es lo q viene del fetch
             final String authHeader = request.getHeader("Authorization");
 
-            //verifica si el token llego
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 token = authHeader.substring(7);
+            } else {
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null) {
+                    for (Cookie c : cookies) {
+                        if ("token".equals(c.getName())) {
+                            token = c.getValue();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (token != null) {
                 email = jwtUtil.obtenerEmail(token);
             }
 
