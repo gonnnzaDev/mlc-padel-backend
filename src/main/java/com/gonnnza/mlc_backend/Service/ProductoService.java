@@ -57,7 +57,7 @@ public class ProductoService {
                 .findAll()
                 .stream()
                 .map(p -> new ProductoArticuloDTO(
-                        p.getImagenes().getFirst(),
+                        p.getImagenes() != null && !p.getImagenes().isEmpty() ? p.getImagenes().getFirst() : null,
                         p.getNombre(),
                         p.getPrecioLista(),
                         p.getPrecioFinal(),

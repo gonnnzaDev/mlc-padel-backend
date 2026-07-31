@@ -1,5 +1,6 @@
 package com.gonnnza.mlc_backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gonnnza.mlc_backend.Enum.RolEnum;
 
 import jakarta.persistence.Entity;
@@ -33,6 +34,7 @@ public class Usuario {
 
     private String telefono;
 
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)

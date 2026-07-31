@@ -46,7 +46,7 @@ public class Pedido {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pedido_id")
+    @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
 }
