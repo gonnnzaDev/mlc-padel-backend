@@ -1,56 +1,62 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  lombok.Generated
+ *  org.springframework.http.ResponseEntity
+ *  org.springframework.security.access.prepost.PreAuthorize
+ *  org.springframework.web.bind.annotation.GetMapping
+ *  org.springframework.web.bind.annotation.PathVariable
+ *  org.springframework.web.bind.annotation.PutMapping
+ *  org.springframework.web.bind.annotation.RequestMapping
+ *  org.springframework.web.bind.annotation.RestController
+ */
 package com.gonnnza.mlc_backend.Controller;
 
 import com.gonnnza.mlc_backend.Service.TicketService;
-import lombok.AllArgsConstructor;
+import java.util.Map;
+import lombok.Generated;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/pedidos")
-@AllArgsConstructor
-
-//Controller para gestionar los pedidos
+@RequestMapping(value={"/pedidos"})
 public class PedidoController {
-
     private final TicketService ticketService;
 
-
-    // ADMIN Y DUENIO ---------------------------------------------------------------------
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
-    @PutMapping("/cancelar/{id}")
+    @PreAuthorize(value="hasAnyRole('ADMIN', 'DUENIO')")
+    @PutMapping(value={"/cancelar/{id}"})
     public ResponseEntity<?> cancelarPedido(@PathVariable Long id) {
-
-        ticketService.cancelarTicketPedido(id);
-        return ResponseEntity.ok().body("Realizado con exito");
+        this.ticketService.cancelarTicketPedido(id);
+        return ResponseEntity.ok().body((Object)"Realizado con exito");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
-    @PutMapping("/realizar/{id}")
+    @PreAuthorize(value="hasAnyRole('ADMIN', 'DUENIO')")
+    @PutMapping(value={"/realizar/{id}"})
     public ResponseEntity<?> realizadoPedido(@PathVariable Long id) {
-
-        ticketService.marcarComoRealizado(id);
-
-        return ResponseEntity.ok().body("Realizado con exito");
+        this.ticketService.marcarComoRealizado(id);
+        return ResponseEntity.ok().body((Object)"Realizado con exito");
     }
 
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
+    @PreAuthorize(value="hasAnyRole('ADMIN', 'DUENIO')")
     @GetMapping
     public ResponseEntity<?> verListaDePedidos() {
-
-        return ResponseEntity.ok().body(Map.of("pedidos", ticketService.listarTickets()));
+        return ResponseEntity.ok().body(Map.of("pedidos", this.ticketService.listarTickets()));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
-    @GetMapping("/{estado}")
+    @PreAuthorize(value="hasAnyRole('ADMIN', 'DUENIO')")
+    @GetMapping(value={"/{estado}"})
     public ResponseEntity<?> verListaDePedidos(@PathVariable String estado) {
-
-        return ResponseEntity.ok().body(Map.of("pedidos", ticketService.listarTicketsFiltradosPorEstado(estado)));
+        return ResponseEntity.ok().body(Map.of("pedidos", this.ticketService.listarTicketsFiltradosPorEstado(estado)));
     }
 
-
+    @Generated
+    public PedidoController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
 }

@@ -1,6 +1,10 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package com.gonnnza.mlc_backend.Exceptions;
 
-public class BadRequestException extends RuntimeException {
+public class BadRequestException
+extends RuntimeException {
     public BadRequestException(String message) {
         super(message);
     }

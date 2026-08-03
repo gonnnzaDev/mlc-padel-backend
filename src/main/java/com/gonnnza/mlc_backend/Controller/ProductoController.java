@@ -1,95 +1,106 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  jakarta.validation.Valid
+ *  lombok.Generated
+ *  org.springframework.http.ResponseEntity
+ *  org.springframework.security.access.prepost.PreAuthorize
+ *  org.springframework.web.bind.annotation.DeleteMapping
+ *  org.springframework.web.bind.annotation.GetMapping
+ *  org.springframework.web.bind.annotation.PathVariable
+ *  org.springframework.web.bind.annotation.PostMapping
+ *  org.springframework.web.bind.annotation.PutMapping
+ *  org.springframework.web.bind.annotation.RequestBody
+ *  org.springframework.web.bind.annotation.RequestMapping
+ *  org.springframework.web.bind.annotation.RequestParam
+ *  org.springframework.web.bind.annotation.RestController
+ */
 package com.gonnnza.mlc_backend.Controller;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
 
 import com.gonnnza.mlc_backend.DTO.ActualizarProductoDTO;
 import com.gonnnza.mlc_backend.DTO.AgregarProductoDTO;
 import com.gonnnza.mlc_backend.Service.ProductoService;
-
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.Generated;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/productos")
-@AllArgsConstructor
-
+@RequestMapping(value={"/productos"})
 public class ProductoController {
-
     private final ProductoService service;
-    //PUBLICOS  ------------------------------------------------------------------------
 
-    @GetMapping("/{id}")
+    @GetMapping(value={"/{id}"})
     public ResponseEntity<?> buscarProductoPorId(@PathVariable Long id) {
-        return ResponseEntity.ok().body(service.buscarProductoPorId(id));
+        return ResponseEntity.ok().body((Object)this.service.buscarProductoPorId(id));
     }
-
 
     @GetMapping
     public ResponseEntity<?> listarProductos() {
-
-        return ResponseEntity.ok().body(service.listarProductos());
+        return ResponseEntity.ok().body(this.service.listarProductos());
     }
 
-    @GetMapping("/articulos/filtrar/{categoria}")
+    @GetMapping(value={"/articulos/filtrar/{categoria}"})
     public ResponseEntity<?> filtrarProductosPorCategoria(@PathVariable String categoria) {
-
-        return ResponseEntity.ok().body(service.listarProductosDeUnaCategoria(categoria));
+        return ResponseEntity.ok().body(this.service.listarProductosDeUnaCategoria(categoria));
     }
 
-    //Buscador
-    @GetMapping("/articulos/buscar")
+    @GetMapping(value={"/articulos/buscar"})
     public ResponseEntity<?> buscarProductos(@RequestParam String q) {
-        return ResponseEntity.ok().body(service.buscarProductos(q));
+        return ResponseEntity.ok().body(this.service.buscarProductos(q));
     }
 
-    //Endpoint para el /index
-    @GetMapping("/articulos")
+    @GetMapping(value={"/articulos"})
     public ResponseEntity<?> listarTodosProductosEnArticulos() {
-        return ResponseEntity.ok().body(service.listarProductosEnArticulos());
+        return ResponseEntity.ok().body(this.service.listarProductosEnArticulos());
     }
 
-    //ADMIN ------------------------------------------------------------------------
-
-    //Crud para la vista de admin / duenio
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
-    @GetMapping("/admin")
+    @PreAuthorize(value="hasAnyRole('ADMIN', 'DUENIO')")
+    @GetMapping(value={"/admin"})
     public ResponseEntity<?> listarTodosProductosApartadoAdmin() {
-        return ResponseEntity.ok().body(service.listarProductosApartadoAdmin());
+        return ResponseEntity.ok().body(this.service.listarProductosApartadoAdmin());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
-    @DeleteMapping("/{id}")
+    @PreAuthorize(value="hasAnyRole('ADMIN', 'DUENIO')")
+    @DeleteMapping(value={"/{id}"})
     public ResponseEntity<?> eliminarProductoPorId(@PathVariable Long id) {
-        service.eliminarProducto(id);
-        return ResponseEntity.ok().body("Eliminado con exito");
+        this.service.eliminarProducto(id);
+        return ResponseEntity.ok().body((Object)"Eliminado con exito");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
-    @DeleteMapping("/{producto_id}/imagen/{imagen_id}")
-    public ResponseEntity<?> eliminarFotoDeProducto(
-            @PathVariable("producto_id") Long productoId,
-            @PathVariable("imagen_id") Long imagenId) {
-        service.eliminarFotoDeProducto(productoId, imagenId);
-        return ResponseEntity.ok().body("Eliminado con exito");
+    @PreAuthorize(value="hasAnyRole('ADMIN', 'DUENIO')")
+    @DeleteMapping(value={"/{producto_id}/imagen/{imagen_id}"})
+    public ResponseEntity<?> eliminarFotoDeProducto(@PathVariable(value="producto_id") Long productoId, @PathVariable(value="imagen_id") Long imagenId) {
+        this.service.eliminarFotoDeProducto(productoId, imagenId);
+        return ResponseEntity.ok().body((Object)"Eliminado con exito");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
-    @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @Valid @RequestBody ActualizarProductoDTO
-            dto) {
-        service.actualizarProducto(id, dto);
-        return ResponseEntity.ok().body("Actualizado con exito");
+    @PreAuthorize(value="hasAnyRole('ADMIN', 'DUENIO')")
+    @PutMapping(value={"/{id}"})
+    public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @Valid @RequestBody ActualizarProductoDTO dto) {
+        this.service.actualizarProducto(id, dto);
+        return ResponseEntity.ok().body((Object)"Actualizado con exito");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'DUENIO')")
+    @PreAuthorize(value="hasAnyRole('ADMIN', 'DUENIO')")
     @PostMapping
     public ResponseEntity<?> guardarProducto(@Valid @RequestBody AgregarProductoDTO dto) {
-        service.guardarProducto(dto);
-        return ResponseEntity.ok().body("Guardado con exito");
-
+        this.service.guardarProducto(dto);
+        return ResponseEntity.ok().body((Object)"Guardado con exito");
     }
 
+    @Generated
+    public ProductoController(ProductoService service) {
+        this.service = service;
+    }
 }

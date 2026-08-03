@@ -1,64 +1,56 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  io.jsonwebtoken.Claims
+ *  io.jsonwebtoken.Jwts
+ *  io.jsonwebtoken.SignatureAlgorithm
+ *  io.jsonwebtoken.security.Keys
+ *  org.springframework.beans.factory.annotation.Value
+ *  org.springframework.security.core.userdetails.UserDetails
+ *  org.springframework.stereotype.Component
+ */
 package com.gonnnza.mlc_backend.Security;
 
-import org.springframework.beans.factory.annotation.Value;
 import com.gonnnza.mlc_backend.Model.Usuario;
-import io.jsonwebtoken.*;
-
-import java.util.Date;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Date;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-
 @Component
 public class JwtUtil {
-
-    @Value("${jwt.key}")
+    @Value(value="${jwt.key}")
     private String key;
 
     private Key getKey() {
-        return Keys.hmacShaKeyFor(key.getBytes());
+        return Keys.hmacShaKeyFor((byte[])this.key.getBytes());
     }
 
-    // cuando hace el login aca genera el tocken
     public String generaToken(Usuario usuario) {
-
-        int tiempoDeExpiracionMs = 600000;
-
-        return Jwts.builder().setSubject(usuario.getEmail())
-                .claim("id", usuario.getId())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + tiempoDeExpiracionMs))
-                .signWith(getKey(), SignatureAlgorithm.HS512)
-                .compact();
+        int tiempoDeExpiracionMs = 10800000;
+        return Jwts.builder().setSubject(usuario.getEmail()).claim("id", (Object)usuario.getId()).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + (long)tiempoDeExpiracionMs)).signWith(this.getKey(), SignatureAlgorithm.HS512).compact();
     }
 
-    //lee el token sirve para los auxiliares en el esValido
     public Claims leerTocken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return (Claims)Jwts.parserBuilder().setSigningKey(this.getKey()).build().parseClaimsJws(token).getBody();
     }
 
-    //Para saber de quien es el tocken (aux)
     public String obtenerEmail(String token) {
-        return leerTocken(token).getSubject();
+        return this.leerTocken(token).getSubject();
     }
 
-    //saber si expiro (aux)
     public boolean estaExpirado(String token) {
-        return leerTocken(token).getExpiration().before(new Date());
+        return this.leerTocken(token).getExpiration().before(new Date());
     }
 
-    //comprueba con los metodos antes creados si es valido
     public boolean esValido(String token, UserDetails userDetails) {
-        String email = obtenerEmail(token);
-        return email.equals(userDetails.getUsername()) && !estaExpirado(token);
+        String email = this.obtenerEmail(token);
+        return email.equals(userDetails.getUsername()) && !this.estaExpirado(token);
     }
-
-
 }

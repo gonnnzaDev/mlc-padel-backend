@@ -1,43 +1,50 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  lombok.Generated
+ *  org.springframework.security.crypto.password.PasswordEncoder
+ *  org.springframework.stereotype.Service
+ */
 package com.gonnnza.mlc_backend.Service;
 
 import com.gonnnza.mlc_backend.DTO.UsuarioLoginDTO;
 import com.gonnnza.mlc_backend.Exceptions.BadRequestException;
 import com.gonnnza.mlc_backend.Exceptions.CredentialsException;
-import com.gonnnza.mlc_backend.Security.JwtUtil;
 import com.gonnnza.mlc_backend.Exceptions.NotFoundException;
 import com.gonnnza.mlc_backend.Model.Usuario;
 import com.gonnnza.mlc_backend.Repository.UsuarioRepo;
-import lombok.AllArgsConstructor;
+import com.gonnnza.mlc_backend.Security.JwtUtil;
+import lombok.Generated;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-
-@AllArgsConstructor
 public class UsuarioService {
-
     private final UsuarioRepo repo;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
     public String login(UsuarioLoginDTO dto) {
-
-        if (dto == null)
+        if (dto == null) {
             throw new BadRequestException("Usuario nulo -> No fue recibido un usuario");
-
+        }
         String email = dto.getEmail();
-        Usuario usuario = buscarUsuarioPorEmail(email);
-
-        if (!passwordEncoder.matches(dto.getPassword(), usuario.getPassword()))
+        Usuario usuario = this.buscarUsuarioPorEmail(email);
+        if (!this.passwordEncoder.matches((CharSequence)dto.getPassword(), usuario.getPassword())) {
             throw new CredentialsException("Usuario No Encontrado");
-
-        return jwtUtil.generaToken(usuario);
+        }
+        return this.jwtUtil.generaToken(usuario);
     }
 
     public Usuario buscarUsuarioPorEmail(String email) {
-        return repo
-                .findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Usuario No encontrado"));
+        return this.repo.findByEmail(email).orElseThrow(() -> new NotFoundException("Usuario No encontrado"));
     }
 
+    @Generated
+    public UsuarioService(UsuarioRepo repo, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+        this.repo = repo;
+        this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
+    }
 }

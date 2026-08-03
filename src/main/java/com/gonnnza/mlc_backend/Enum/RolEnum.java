@@ -1,11 +1,11 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package com.gonnnza.mlc_backend.Enum;
 
-/*
-*
-* Roles dentro de la aplicacion
-*
-* */
-
 public enum RolEnum {
-    ADMIN, DUENIO, CLIENTE
+    ADMIN,
+    DUENIO,
+    CLIENTE;
+
 }

@@ -1,17 +1,22 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  org.springframework.data.jpa.repository.JpaRepository
+ *  org.springframework.stereotype.Repository
+ */
 package com.gonnnza.mlc_backend.Repository;
 
-import java.util.List;
-
 import com.gonnnza.mlc_backend.Model.Categoria;
+import com.gonnnza.mlc_backend.Model.Producto;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.gonnnza.mlc_backend.Model.Producto;
-
 @Repository
-public interface ProductoRepo extends JpaRepository<Producto, Long> {
+public interface ProductoRepo
+extends JpaRepository<Producto, Long> {
+    public List<Producto> findAllByCategoria(Categoria var1);
 
-    List<Producto> findAllByCategoria(Categoria categoria);
-
-    List<Producto> findByNombreContainingIgnoreCase(String nombreProducto);
+    public List<Producto> findByNombreContainingIgnoreCase(String var1);
 }
