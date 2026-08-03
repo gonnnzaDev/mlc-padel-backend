@@ -25,7 +25,7 @@ public class JwtUtil {
     // cuando hace el login aca genera el tocken
     public String generaToken(Usuario usuario) {
 
-        int tiempoDeExpiracionMs = 86400000;
+        int tiempoDeExpiracionMs = 600000;
 
         return Jwts.builder().setSubject(usuario.getEmail())
                 .claim("id", usuario.getId())
