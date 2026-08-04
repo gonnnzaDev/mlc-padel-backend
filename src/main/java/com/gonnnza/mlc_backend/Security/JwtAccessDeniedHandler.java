@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  jakarta.servlet.http.HttpServletRequest
- *  jakarta.servlet.http.HttpServletResponse
- *  org.springframework.security.access.AccessDeniedException
- *  org.springframework.security.web.access.AccessDeniedHandler
- *  org.springframework.stereotype.Component
- */
 package com.gonnnza.mlc_backend.Security;
 
 import jakarta.servlet.http.HttpServletRequest;

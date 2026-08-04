@@ -1,23 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  jakarta.servlet.Filter
- *  lombok.Generated
- *  org.springframework.context.annotation.Bean
- *  org.springframework.context.annotation.Configuration
- *  org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
- *  org.springframework.security.config.annotation.web.builders.HttpSecurity
- *  org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
- *  org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer
- *  org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer$AuthorizedUrl
- *  org.springframework.security.web.SecurityFilterChain
- *  org.springframework.security.web.access.AccessDeniedHandler
- *  org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
- *  org.springframework.web.cors.CorsConfiguration
- *  org.springframework.web.cors.CorsConfigurationSource
- *  org.springframework.web.cors.UrlBasedCorsConfigurationSource
- */
 package com.gonnnza.mlc_backend.Config;
 
 import com.gonnnza.mlc_backend.Security.JwtFilter;

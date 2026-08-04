@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  io.jsonwebtoken.Claims
- *  io.jsonwebtoken.Jwts
- *  io.jsonwebtoken.SignatureAlgorithm
- *  io.jsonwebtoken.security.Keys
- *  org.springframework.beans.factory.annotation.Value
- *  org.springframework.security.core.userdetails.UserDetails
- *  org.springframework.stereotype.Component
- */
 package com.gonnnza.mlc_backend.Security;
 
 import com.gonnnza.mlc_backend.Model.Usuario;

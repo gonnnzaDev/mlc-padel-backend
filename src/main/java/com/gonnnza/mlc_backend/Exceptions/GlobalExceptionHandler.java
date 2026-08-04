@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  org.springframework.http.ResponseEntity
- *  org.springframework.web.bind.MethodArgumentNotValidException
- *  org.springframework.web.bind.annotation.ControllerAdvice
- *  org.springframework.web.bind.annotation.ExceptionHandler
- */
 package com.gonnnza.mlc_backend.Exceptions;
 
 import com.gonnnza.mlc_backend.Exceptions.BadRequestException;

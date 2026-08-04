@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  org.springframework.beans.factory.annotation.Value
- *  org.springframework.context.annotation.Configuration
- *  org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
- *  org.springframework.web.servlet.config.annotation.WebMvcConfigurer
- */
 package com.gonnnza.mlc_backend.Config;
 
 import org.springframework.beans.factory.annotation.Value;

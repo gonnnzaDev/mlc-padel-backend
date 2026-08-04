@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  jakarta.validation.constraints.NotBlank
- *  jakarta.validation.constraints.NotEmpty
- *  jakarta.validation.constraints.NotNull
- *  jakarta.validation.constraints.PositiveOrZero
- *  lombok.Generated
- */
 package com.gonnnza.mlc_backend.DTO;
 
 import com.gonnnza.mlc_backend.Model.Categoria;

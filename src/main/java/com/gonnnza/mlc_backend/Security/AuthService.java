@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  lombok.Generated
- *  org.springframework.security.authentication.AnonymousAuthenticationToken
- *  org.springframework.security.core.Authentication
- *  org.springframework.security.core.context.SecurityContextHolder
- *  org.springframework.stereotype.Component
- */
 package com.gonnnza.mlc_backend.Security;
 
 import com.gonnnza.mlc_backend.Model.Usuario;

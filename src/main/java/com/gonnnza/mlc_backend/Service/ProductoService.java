@@ -1,11 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  jakarta.transaction.Transactional
- *  lombok.Generated
- *  org.springframework.stereotype.Service
- */
 package com.gonnnza.mlc_backend.Service;
 
 import com.gonnnza.mlc_backend.DTO.ActualizarProductoDTO;

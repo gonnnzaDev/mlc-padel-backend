@@ -1,14 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  lombok.Generated
- *  org.springframework.security.core.userdetails.User
- *  org.springframework.security.core.userdetails.UserDetails
- *  org.springframework.security.core.userdetails.UserDetailsService
- *  org.springframework.security.core.userdetails.UsernameNotFoundException
- *  org.springframework.stereotype.Service
- */
 package com.gonnnza.mlc_backend.Security;
 
 import com.gonnnza.mlc_backend.Exceptions.NotFoundException;

@@ -1,20 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.fasterxml.jackson.annotation.JsonManagedReference
- *  jakarta.persistence.CascadeType
- *  jakarta.persistence.Column
- *  jakarta.persistence.Entity
- *  jakarta.persistence.GeneratedValue
- *  jakarta.persistence.GenerationType
- *  jakarta.persistence.Id
- *  jakarta.persistence.JoinColumn
- *  jakarta.persistence.ManyToOne
- *  jakarta.persistence.OneToMany
- *  jakarta.persistence.Table
- *  lombok.Generated
- */
 package com.gonnnza.mlc_backend.Model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;

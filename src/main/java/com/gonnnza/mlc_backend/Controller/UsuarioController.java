@@ -1,19 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  jakarta.servlet.http.Cookie
- *  jakarta.servlet.http.HttpServletRequest
- *  lombok.Generated
- *  org.springframework.http.ResponseCookie
- *  org.springframework.http.ResponseEntity
- *  org.springframework.http.ResponseEntity$BodyBuilder
- *  org.springframework.web.bind.annotation.GetMapping
- *  org.springframework.web.bind.annotation.PostMapping
- *  org.springframework.web.bind.annotation.RequestBody
- *  org.springframework.web.bind.annotation.RequestMapping
- *  org.springframework.web.bind.annotation.RestController
- */
 package com.gonnnza.mlc_backend.Controller;
 
 import com.gonnnza.mlc_backend.DTO.UsuarioLoginDTO;

@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  lombok.Generated
- */
 package com.gonnnza.mlc_backend.DTO;
 
 import com.gonnnza.mlc_backend.Model.Producto;

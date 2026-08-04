@@ -1,16 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  org.springframework.beans.factory.annotation.Value
- *  org.springframework.http.ResponseEntity
- *  org.springframework.security.access.prepost.PreAuthorize
- *  org.springframework.web.bind.annotation.PostMapping
- *  org.springframework.web.bind.annotation.RequestMapping
- *  org.springframework.web.bind.annotation.RequestParam
- *  org.springframework.web.bind.annotation.RestController
- *  org.springframework.web.multipart.MultipartFile
- */
 package com.gonnnza.mlc_backend.Controller;
 
 import java.io.IOException;

@@ -1,11 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  lombok.Generated
- *  org.springframework.security.crypto.password.PasswordEncoder
- *  org.springframework.stereotype.Service
- */
 package com.gonnnza.mlc_backend.Service;
 
 import com.gonnnza.mlc_backend.DTO.UsuarioLoginDTO;

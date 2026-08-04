@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  jakarta.validation.constraints.Email
- *  jakarta.validation.constraints.NotBlank
- *  jakarta.validation.constraints.NotNull
- *  lombok.Generated
- */
 package com.gonnnza.mlc_backend.DTO;
 
 import com.gonnnza.mlc_backend.Model.Pedido;

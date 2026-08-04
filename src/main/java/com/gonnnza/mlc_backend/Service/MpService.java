@@ -1,19 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mercadopago.MercadoPagoConfig
- *  com.mercadopago.client.payment.PaymentClient
- *  com.mercadopago.client.preference.PreferenceClient
- *  com.mercadopago.client.preference.PreferenceItemRequest
- *  com.mercadopago.client.preference.PreferenceRequest
- *  com.mercadopago.exceptions.MPApiException
- *  com.mercadopago.exceptions.MPException
- *  com.mercadopago.resources.payment.Payment
- *  com.mercadopago.resources.preference.Preference
- *  org.springframework.beans.factory.annotation.Value
- *  org.springframework.stereotype.Service
- */
 package com.gonnnza.mlc_backend.Service;
 
 import com.gonnnza.mlc_backend.DTO.CarritoDesdeFrontDTO;

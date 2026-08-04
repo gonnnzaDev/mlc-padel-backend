@@ -1,18 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mercadopago.exceptions.MPApiException
- *  com.mercadopago.exceptions.MPException
- *  jakarta.validation.Valid
- *  lombok.Generated
- *  org.springframework.http.ResponseEntity
- *  org.springframework.web.bind.annotation.PostMapping
- *  org.springframework.web.bind.annotation.RequestBody
- *  org.springframework.web.bind.annotation.RequestMapping
- *  org.springframework.web.bind.annotation.RequestParam
- *  org.springframework.web.bind.annotation.RestController
- */
 package com.gonnnza.mlc_backend.Controller;
 
 import com.gonnnza.mlc_backend.DTO.CarritoDesdeFrontDTO;
